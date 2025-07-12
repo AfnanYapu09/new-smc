@@ -112,12 +112,12 @@ f_drawLineLabel(idx, lvl, lstyle, lcolor, txt, labStyle, labSize, ext=extend.non
     float adjust    = syminfo.mintick
     float openLvl   = ta.valuewhen(bar_index == idx, open, 0)
     float closeLvl  = ta.valuewhen(bar_index == idx, close, 0)
-    float bodyHigh  = math.max(openLvl, closeLvl)
-    float bodyLow   = math.min(openLvl, closeLvl)
-    float baseLevel = labStyle == label.style_label_up ? bodyHigh :
-                      labStyle == label.style_label_down ? bodyLow : lvl
-    float plotLevel = labStyle == label.style_label_up ? baseLevel + adjust :\
-                      labStyle == label.style_label_down ? baseLevel - adjust : lvl
+    float bodyHigh  = na(openLvl) or na(closeLvl) ? lvl : math.max(openLvl, closeLvl)
+    float bodyLow   = na(openLvl) or na(closeLvl) ? lvl : math.min(openLvl, closeLvl)
+    float baseLevel = labStyle == label.style_label_down ? bodyHigh :
+                      labStyle == label.style_label_up   ? bodyLow  : lvl
+    float plotLevel = labStyle == label.style_label_down ? baseLevel + adjust :\
+                      labStyle == label.style_label_up   ? baseLevel - adjust : lvl
     line.new(idx, plotLevel, bar_index, plotLevel, style=lstyle, color=lcolor, extend=ext)
     label.new((idx + bar_index) / 2, plotLevel, text=txt, color=color.rgb(0,0,0,100),
               textcolor=lcolor, style=labStyle, size=labSize)
