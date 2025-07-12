@@ -29,10 +29,33 @@ var ArrayValue = array.new_float()
 var ArrayIndex =  array.new_int()
 var ArrayTypeAdv  = array.new_string()
 var ArrayValueAdv = array.new_float()
-var ArrayIndexAdv =  array.new_int()  
+var ArrayIndexAdv =  array.new_int()
 PASS = 0
-HighPivot = ta.pivothigh(PP,PP)
-LowPivot = ta.pivotlow(PP,PP)
+// === Pivot Detection using HH & LL Algorithm ===
+lb = PP
+rb = PP
+ph = ta.pivothigh(lb, rb)
+pl = ta.pivotlow(lb, rb)
+iff_1 = pl ? -1 : na
+hl = ph ? 1 : iff_1
+iff_2 = pl ? pl : na
+zz = ph ? ph : iff_2
+valuewhen_1 = ta.valuewhen(hl, hl, 1)
+valuewhen_2 = ta.valuewhen(zz, zz, 1)
+zz := pl and hl == -1 and valuewhen_1 == -1 and pl > valuewhen_2 ? na : zz
+valuewhen_3 = ta.valuewhen(hl, hl, 1)
+valuewhen_4 = ta.valuewhen(zz, zz, 1)
+zz := ph and hl == 1 and valuewhen_3 == 1 and ph < valuewhen_4 ? na : zz
+valuewhen_5 = ta.valuewhen(hl, hl, 1)
+valuewhen_6 = ta.valuewhen(zz, zz, 1)
+hl := hl == -1 and valuewhen_5 == 1 and zz > valuewhen_6 ? na : hl
+valuewhen_7 = ta.valuewhen(hl, hl, 1)
+valuewhen_8 = ta.valuewhen(zz, zz, 1)
+hl := hl == 1 and valuewhen_7 == -1 and zz < valuewhen_8 ? na : hl
+zz := na(hl) ? na : zz
+
+HighPivot = hl == 1 ? zz : na
+LowPivot  = hl == -1 ? zz : na
 HighValue = ta.valuewhen(HighPivot ,High[PP], 0)
 LowValue = ta.valuewhen(LowPivot ,Low[PP], 0)
 HighIndex = ta.valuewhen(HighPivot ,barIndex[PP], 0)
