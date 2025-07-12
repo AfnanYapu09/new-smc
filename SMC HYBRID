@@ -62,6 +62,14 @@ HighIndex = ta.valuewhen(HighPivot ,barIndex[PP], 0)
 LowIndex = ta.valuewhen(LowPivot ,barIndex[PP], 0)
 correctHighPivot = 0.0
 correctLowPivot =  0.0
+
+// draw basic pivot lines for visual feedback
+if not na(HighPivot)
+    f_drawLineLabel(HighIndex, HighValue, minorBoSLineStyle, minorLineColor, 'H',
+        label.style_label_down, size.tiny, extend.none)
+if not na(LowPivot)
+    f_drawLineLabel(LowIndex, LowValue, minorBoSLineStyle, minorLineColor, 'L',
+        label.style_label_up, size.tiny, extend.none)
 var float majorHighLevel = na
 var float majorLowLevel  = na
 var int majorHighIndex = na
