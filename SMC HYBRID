@@ -109,9 +109,13 @@ push_pivot(arrType, arrValue, arrIndex, valType, val, idx) =>
     array.push(arrIndex, idx)
 
 f_drawLineLabel(idx, lvl, lstyle, lcolor, txt, labStyle, labSize, ext=extend.none) =>
-    line.new(idx, lvl, bar_index, lvl, style=lstyle, color=lcolor, extend=ext)
-    label.new((idx + bar_index) / 2, lvl, text=txt, color=color.rgb(0,0,0,100),
+    float adjust = syminfo.mintick
+    float plotLevel = labStyle == label.style_label_up ? lvl + adjust :\
+                      labStyle == label.style_label_down ? lvl - adjust : lvl
+    line.new(idx, plotLevel, bar_index, plotLevel, style=lstyle, color=lcolor, extend=ext)
+    label.new((idx + bar_index) / 2, plotLevel, text=txt, color=color.rgb(0,0,0,100),
               textcolor=lcolor, style=labStyle, size=labSize)
+
 // === Pivot and Trend Logic ===
 if HighPivot  and  LowPivot
     if ArrayType.size() == 0
